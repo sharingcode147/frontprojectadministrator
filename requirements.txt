@@ -1,0 +1,2 @@
+Flask
+psycopg2-binary #interact with DB postgresql in Python (No creo que sea necesario, pq usaremos API)
