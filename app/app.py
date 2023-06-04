@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, url_for, redirect
-
-
+from flask import Flask, render_template, request, url_for, redirect, jsonify
+import urllib.request, json
+import os
 app=Flask(__name__)
 
 # Ejecuta la función antes de una petición
@@ -20,7 +20,7 @@ def index():
         'title':'Index',
         'msg': 'Bienvenido al sitio'
     }
-    return render_template('index.html',data=data)
+    return data
 
 @app.route('/scrapers/<area>')
 def scrapers(area):
@@ -29,17 +29,25 @@ def scrapers(area):
         'msg': area,
         'param': request.args.get('param1')
     }
-    return render_template('scrapers.html',data=data)
+    return data
+
+@app.route("/test")
+def get_movies():
+    url = "https://api.themoviedb.org/3/discover/movie?api_key={}".format(os.environ.get("TMDB_API_KEY"))
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    dict = json.loads(data)
+
+    return render_template ("movies.html", movies=dict["results"])
 
 # Página no encontrada
 def page_not_found(error):
     data={
         'title':'Error',
-        'msg': error
+        'msg': str(error)
     }
-    return render_template('404.html',data=data), 404
-    # print(error)
-    # return redirect(url_for('index'))
+    return data
 
 if __name__=='__main__':
     app.register_error_handler(404, page_not_found)
