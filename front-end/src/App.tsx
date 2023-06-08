@@ -7,7 +7,7 @@ import NotFound from  "./pages/NotFound"
 import Graphs from  "./pages/Graphs"
 import { useState } from 'react';
 function App() {
-    const [token, setToken] = useState('asd');
+    const [token, setToken] = useState('asda');
     if(!token) {
       return <Login setToken={setToken} />
     }
